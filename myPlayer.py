@@ -12,21 +12,10 @@ class myPlayer(PlayerInterface):
         self._mycolor = None
 
     def getPlayerName(self):
-        return "Random Player"
+        return "Mikoyan-Gourevitch Ye-2A"
 
-    def getPlayerMove(self):
-        if self._board.is_game_over():
-            print("Referee told me to play but the game is over!")
-            return (-1,-1)
-        moves = [m for m in self._board.legal_moves()]
-        move = moves[randint(0,len(moves)-1)]
-        self._board.push(move)
-        print("I am playing ", move)
-        (c,x,y) = move
-        assert(c==self._mycolor)
-        print("My current board :")
-        print(self._board)
-        return (x,y) 
+    def getMyColor(self):
+        return self._mycolor
 
     def playOpponentMove(self, x,y):
         assert(self._board.is_valid_move(self._opponent, x, y))
@@ -43,5 +32,72 @@ class myPlayer(PlayerInterface):
         else:
             print("I lost :(!!")
 
+    def winner(self):
+        tab[2]=self.get_nb_pieces()
+        if(tab[0] > tab [1]):
+            return "WHITE" 
+        else:
+            return "BLACK"
+
+    def _max_min(self):
+        global nbnodes
+        nbnodes += 1
+        if self._board.is_game_over():
+           return winner(self)
+        best = -100000000
+        for move in self._board.legal_moves():
+            self._board.push(move)
+            v = _min_max(self,)
+            if v > best:
+                best = v
+            self._board.pop()
+        return best
 
 
+    def _min_max(self):
+        global nbnodes
+        nbnodes += 1
+        if self._board.is_game_over():
+           return winner(self)
+        worst = 100000000
+        for move in self._board.legal_moves():
+            self._board.push(move)
+            v = _max_min(self)
+            if v < worst:
+                worst = v
+            self._board.pop()
+        return worst
+
+
+    # take in count the best shot
+    def _ia_min_max(self):
+        global nbnodes
+        nbnodes += 1
+        best = -100000000
+        best_shot = None
+        list_of_equal_moves = []
+        for move in self._board.legal_moves():
+            self._board.push(move)
+            v = _min_max(self)
+            if v > best or best_shot == None:
+                best = v
+                best_shot = move
+                list_of_equal_moves = [move]
+            elif v == best:
+                list_of_equal_moves.append(move)
+            self._board.pop()
+        return choice(list_of_equal_moves)
+
+
+    def getPlayerMove(self):
+        if self._board.is_game_over():
+            print("Referee told me to play but the game is over!")
+            return (-1,-1)
+        move =  _ia_min_max(self)
+        self._board.push(move)
+        print("I am playing ", move)
+        (c,x,y) = move
+        assert(c==self._mycolor)
+        print("My current board :")
+        print(self._board)
+        return (x,y) 
