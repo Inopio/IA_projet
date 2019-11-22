@@ -1,5 +1,6 @@
 import Reversi
 import myPlayer
+import randomPlayer
 import time
 from io import StringIO
 import sys
@@ -7,7 +8,7 @@ import sys
 b = Reversi.Board(10)
 
 players = []
-player1 = myPlayer.myPlayer()
+player1 = randomPlayer.randomPlayer()
 player1.newGame(b._BLACK)
 players.append(player1)
 player2 = myPlayer.myPlayer()
@@ -39,7 +40,7 @@ while not b.is_game_over():
     sys.stdout = sysstdout
     playeroutput = "\r" + stringio.getvalue()
     stringio.truncate(0)
-    print(("[Player "+str(nextplayer) + "] ").join(playeroutput.splitlines(True)))
+    #print(("[Player "+str(nextplayer) + "] ").join(playeroutput.splitlines(True)))
     outputs[nextplayer] += playeroutput
     totalTime[nextplayer] += time.time() - currentTime
     print("Player ", nextplayercolor, players[nextplayer].getPlayerName(), "plays" + str(move))
