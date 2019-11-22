@@ -12,7 +12,7 @@ class Board:
     _EMPTY = 0
 
     # Attention, la taille du plateau est donnée en paramètre
-    def __init__(self, boardsize = 8):
+    def __init__(self, boardsize = 10):
       self._nbWHITE = 2
       self._nbBLACK = 2
       self._nextPlayer = self._BLACK

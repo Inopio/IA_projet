@@ -7,6 +7,9 @@ from playerInterface import *
 
 class myPlayer(PlayerInterface):
 
+    nbnodes = 0
+    tab = [0,0]
+
     def __init__(self):
         self._board = Reversi.Board(10)
         self._mycolor = None
@@ -27,27 +30,27 @@ class myPlayer(PlayerInterface):
         self._opponent = 1 if color == 2 else 2
 
     def endGame(self, winner):
-        if self._mycolor == winner:
+        if self._mycolor == self.winner():
             print("I won!!!")
         else:
             print("I lost :(!!")
 
     def winner(self):
-        tab[2]=self.get_nb_pieces()
-        if(tab[0] > tab [1]):
-            return "WHITE" 
+        self.tab = self._board.get_nb_pieces()
+        if(self.tab[0] > self.tab[1]):
+            return 2 
         else:
-            return "BLACK"
-
+            return 1
+    
     def _max_min(self):
         global nbnodes
-        nbnodes += 1
+        self.nbnodes += 1
         if self._board.is_game_over():
-           return winner(self)
+           return self.winner()
         best = -100000000
         for move in self._board.legal_moves():
             self._board.push(move)
-            v = _min_max(self,)
+            v = self._min_max()
             if v > best:
                 best = v
             self._board.pop()
@@ -56,29 +59,29 @@ class myPlayer(PlayerInterface):
 
     def _min_max(self):
         global nbnodes
-        nbnodes += 1
+        self.nbnodes += 1
         if self._board.is_game_over():
-           return winner(self)
+           return self.winner()
         worst = 100000000
         for move in self._board.legal_moves():
             self._board.push(move)
-            v = _max_min(self)
+            v = self._max_min()
             if v < worst:
                 worst = v
             self._board.pop()
         return worst
 
-
+    
     # take in count the best shot
     def _ia_min_max(self):
-        global nbnodes
-        nbnodes += 1
+        
+        self.nbnodes += 1
         best = -100000000
         best_shot = None
         list_of_equal_moves = []
         for move in self._board.legal_moves():
             self._board.push(move)
-            v = _min_max(self)
+            v = self._min_max()
             if v > best or best_shot == None:
                 best = v
                 best_shot = move
@@ -88,12 +91,11 @@ class myPlayer(PlayerInterface):
             self._board.pop()
         return choice(list_of_equal_moves)
 
-
     def getPlayerMove(self):
         if self._board.is_game_over():
             print("Referee told me to play but the game is over!")
             return (-1,-1)
-        move =  _ia_min_max(self)
+        move =  self._ia_min_max()
         self._board.push(move)
         print("I am playing ", move)
         (c,x,y) = move
