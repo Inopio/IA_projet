@@ -9,6 +9,18 @@ class myPlayer(PlayerInterface):
 
     nbnodes = 0
     tab = [0,0]
+
+    #tableau pour donner un poids à chaque case, utilisé pour l'heuristique
+    tab_weight = [[ 100, -20, 20, -5, 10, 10, -5, 20, -20, 100] ,
+                  [-20, -40, -5, -5, -3, -3, -5, -5, -40, -20 ],
+                  [20, -5, 15, -4, 5, 5, -4, 15, -5, 20],
+                  [-5,-5, -4, -4, 3, 3, -4, -4, -5, -5],
+                  [10, -3, 5, 3, 2, 2, 3, 5, -3, 10],
+                  [10, -3, 5, 3, 2, 2, 3, 5, -3, 10],
+                  [-5,-5, -4, -4, 3, 3, -4, -4, -5, -5],
+                  [20, -5, 15, -4, 5, 5, -4, 15, -5, 20],
+                  [-20, -40, -5, -5, -3, -3, -5, -5, -40, -20 ],
+                  [ 100, -20, 20, -5, 10, 10, -5, 20, -20, 100]]
     
     def __init__(self):
         self._board = Reversi.Board(10)
@@ -46,7 +58,39 @@ class myPlayer(PlayerInterface):
         if(self.getMyColor() == 2):
             return True
         return False
+
+    def eval(self):
+        self.tab = self._board.get_nb_pieces()
+        nb_max = max(self.tab[0],self.tab[1])
+        nb_min = min(self.tab[0],self.tab[1])
+        
+        #parité
+        if(self.getMyColor() == 1):
+            my_pieces = self.tab[1]
+            opp_pieces = self.tab[0]
+        else:
+            my_pieces = self.tab[0]
+            opp_pieces = self.tab[1]
+        if(my_pieces > opp_pieces):
+            p = (100.0 * my_pieces)/(my_pieces + opp_pieces);
+        elif(my_pieces < opp_pieces):
+             p = -(100.0 * opp_pieces)/(my_pieces + opp_pieces);
+        else:
+            p = 0;
+
+
+        #poids des cases
+        best_weight = -40   #pire poids dans notre tableau pour l'initialiser
+        for move in self._board.legal_moves():
+           if(self.tab_weight[move[1]][move[2]] > best_weight):
+               best_weight = self.tab_weight[move[1]][move[2]]
+        return  100*p + 400 * best_weight
     
+    #poids des stratégies :
+    #10 pour la parité des pièces
+    # 900 pour le poids des cases occupées
+    
+        
     def _max_min(self,profmax=4):
         playerColor = self.isColorWhite()
         global nbnodes
@@ -54,7 +98,7 @@ class myPlayer(PlayerInterface):
         if self._board.is_game_over():
            return self.winner()
         if profmax == 0:
-            eval = self._board.heuristique()
+            eval = self.eval()
             return eval if playerColor else -eval
         best = -100
         for move in self._board.legal_moves():
@@ -72,7 +116,7 @@ class myPlayer(PlayerInterface):
         if self._board.is_game_over():
            return self.winner()
         if profmax == 0:
-            eval = self._board.heuristique()
+            eval = self.eval()
             return eval if playerColor else -eval
         worst = 100
         for move in self._board.legal_moves():
@@ -105,7 +149,7 @@ class myPlayer(PlayerInterface):
         if self._board.is_game_over():
             print("Referee told me to play but the game is over!")
             return (-1,-1)
-        move =  self._ia_min_max(profmax=3)
+        move =  self._ia_min_max(4)
         self._board.push(move)
         print("I am playing ", move)
         (c,x,y) = move
