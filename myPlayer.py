@@ -99,29 +99,10 @@ class myPlayer(PlayerInterface):
         
 
     def eval(self):
-        self.tab = self._board.get_nb_pieces()
-        nb_max = max(self.tab[0],self.tab[1])
-        nb_min = min(self.tab[0],self.tab[1])
-        
-        #parité
-        if(self.getMyColor() == 1):
-            my_pieces = self.tab[1]
-            opp_pieces = self.tab[0]
-        else:
-            my_pieces = self.tab[0]
-            opp_pieces = self.tab[1]
-        if(my_pieces > opp_pieces):
-            p = (100.0 * my_pieces)/(my_pieces + opp_pieces);
-        elif(my_pieces < opp_pieces):
-             p = -(100.0 * opp_pieces)/(my_pieces + opp_pieces);
-        else:
-            p = 0;
-
-
-       
+        h = self._board.heuristique(player=None)
         #mobilite
         m = self.mobilityEval()
-        return  100*p + self.MC * m + self.SC
+        return  self.MC * m + self.SC + h
     
     #poids des stratégies :
     #10 pour la parité des pièces
