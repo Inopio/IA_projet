@@ -9,7 +9,9 @@ class myPlayer(PlayerInterface):
 
     nbnodes = 0
     tab = [0,0]
-
+    EC = 500
+    MC = 0
+    SC = 0
     #tableau pour donner un poids à chaque case, utilisé pour l'heuristique
     tab_weight = [[ 100, -20, 20, -5, 10, 10, -5, 20, -20, 100] ,
                   [-20, -40, -5, -5, -3, -3, -5, -5, -40, -20 ],
@@ -59,6 +61,43 @@ class myPlayer(PlayerInterface):
             return True
         return False
 
+    def setMcSc(self):
+        tabDiscs =  self._board.get_nb_pieces()
+        discs = tabDiscs[0] + tabDiscs[1]
+        self.MC = 350 - 2 * discs
+        if( discs < 10):
+            self.SC = 200 - discs
+        elif( discs < 20):
+            self.SC = 190 - 2 * (discs - 10)
+        elif( discs < 40):
+           self. SC = 170 - 5 * (discs - 20)
+        elif( discs < 50):
+           self.SC = 70 - 7 * (discs - 40)
+        else:
+           self.SC = 0
+
+
+    def num_valid_moves(self, player):
+        count = 0
+        for i in range (0,10):
+            for j in range (0,10):
+                if(self._board.is_valid_move(player, i, j)):
+                    count+=1
+        return count
+
+    def mobilityEval(self):
+        if(self._mycolor ==1):
+            opponent = 2
+        else:
+            opponent = 1
+        minMoves = min (self.num_valid_moves(self._mycolor),self.num_valid_moves(opponent))
+        maxMoves = max(self.num_valid_moves(self._mycolor),self.num_valid_moves(opponent))
+        if(minMoves + maxMoves != 0):
+            return 100 * (maxMoves - minMoves) / (maxMoves + minMoves )
+        else :
+            return 0
+        
+
     def eval(self):
         self.tab = self._board.get_nb_pieces()
         nb_max = max(self.tab[0],self.tab[1])
@@ -79,12 +118,10 @@ class myPlayer(PlayerInterface):
             p = 0;
 
 
-        #poids des cases
-        best_weight = -40   #pire poids dans notre tableau pour l'initialiser
-        for move in self._board.legal_moves():
-           if(self.tab_weight[move[1]][move[2]] > best_weight):
-               best_weight = self.tab_weight[move[1]][move[2]]
-        return  100*p + 400 * best_weight
+       
+        #mobilite
+        m = self.mobilityEval()
+        return  100*p + self.MC * m + self.SC
     
     #poids des stratégies :
     #10 pour la parité des pièces
