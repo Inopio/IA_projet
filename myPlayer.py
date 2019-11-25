@@ -145,6 +145,29 @@ class myPlayer(PlayerInterface):
             self._board.pop()
         return worst
 
+
+    def alphaBeta(self,depth, a, B, maximizingPlayer=True):
+        if depth == 0:
+            return self.eval
+        
+        if maximizingPlayer== True:
+            value = -10000
+            for move in self._board.legal_moves():
+                value = max(value, self.alphaBeta(depth - 1, a, B, False))
+                a = max(a, value)
+                if a >= B:
+                    break
+            return value
+        else:
+            value = +10000
+            for move in self._board.legal_moves():
+                value = min(value, self.alphaBeta(depth -1, a, B, True))
+                B = min(B, value)
+                if a >= B:
+                    break
+            return value
+
+        
     # take in count the best shot
     def _ia_min_max(self,profmax=4):
         self.nbnodes += 1
@@ -153,7 +176,7 @@ class myPlayer(PlayerInterface):
         list_of_equal_moves = []
         for move in self._board.legal_moves():
             self._board.push(move)
-            v = self._min_max(profmax-1)
+            v = self.alphaBeta(4,-1000, 1000,True)
             if v > best or best_shot == None:
                 best = v
                 best_shot = move
@@ -163,11 +186,13 @@ class myPlayer(PlayerInterface):
             self._board.pop()
         return choice(list_of_equal_moves)
 
+
+        
     def getPlayerMove(self):
         if self._board.is_game_over():
             print("Referee told me to play but the game is over!")
             return (-1,-1)
-        move =  self._ia_min_max(4)
+        move =  self._ia_min_max()
         self._board.push(move)
         print("I am playing ", move)
         (c,x,y) = move
