@@ -21,10 +21,10 @@ class Board:
       for x in range(self._boardsize):
           self._board.append([self._EMPTY]* self._boardsize)
       _middle = int(self._boardsize / 2)
-      self._board[_middle-1][_middle-1] = self._BLACK 
-      self._board[_middle-1][_middle] = self._WHITE
-      self._board[_middle][_middle-1] = self._WHITE
-      self._board[_middle][_middle] = self._BLACK 
+      self._board[_middle-1][_middle-1] = self._WHITE 
+      self._board[_middle-1][_middle] = self._BLACK
+      self._board[_middle][_middle-1] = self._BLACK
+      self._board[_middle][_middle] = self._WHITE 
       
       self._stack= []
       self._successivePass = 0
