@@ -1,6 +1,7 @@
 import Reversi
 import myPlayer
 import randomPlayer
+import alphaOnePlayer
 import time
 from io import StringIO
 import sys
@@ -8,7 +9,7 @@ import sys
 b = Reversi.Board(10)
 
 players = []
-player1 = randomPlayer.randomPlayer()
+player1 = alphaOnePlayer.alphaOnePlayer()
 player1.newGame(b._BLACK)
 players.append(player1)
 player2 = myPlayer.myPlayer()

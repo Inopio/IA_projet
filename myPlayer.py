@@ -4,8 +4,11 @@ import time
 import Reversi
 from random import randint, choice
 from playerInterface import *
+from multiprocessing.pool import ThreadPool
 
 class myPlayer(PlayerInterface):
+
+    pool = ThreadPool(processes=1)  #for the thread
 
     nbnodes = 0
     tab = [0,0]
@@ -114,22 +117,46 @@ class myPlayer(PlayerInterface):
                 v = v + self.tab_weight[9][9]
         return v
 
-    def evalBoardExceptCorners(self):
+    def evalEdgeOccupation(self):
         v = 0
-        for x in range (0,10):
-            for y in range (0,10):
-                if(self._board._board[x][y] == self._mycolor):
-                    v = v + self.tab_weight[x][y]
+        for i in range (0,10) :
+            if(self._board._board[0][i] == self._mycolor):
+                v+=1
+            if(self._board._board[9][i] == self._mycolor):
+                v+=1
+        for j in range (1,9):
+            if(self._board._board[i][9] == self._mycolor):
+                v+=1
+            if(self._board._board[i][0] == self._mycolor):
+                v+=1
         return v
-    
+
     def eval(self):
+
+        async_result = self.pool.apply_async(self.mobilityEval)
+        m = async_result.get()
+
+        async_result = self.pool.apply_async(self.OccupiedCornesEval)
+        c = async_result.get()
+
+        async_result = self.pool.apply_async(self._board.heuristique)
+        s = async_result.get()
+
+        async_result = self.pool.apply_async(self.evalEdgeOccupation)
+        e = async_result.get()
+        
         #mobilite
-        m = self.mobilityEval()
+        #m = self.mobilityEval()
+        
         #Corners occupation
-        v = self.OccupiedCornesEval()
-        #eval rest of the board
-        #b = self.evalBoardExceptCorners()
-        return  self.MC * m + self.SC * v
+        #c = self.OccupiedCornesEval()
+
+        #heuristic of the score
+        #s = self._board.heuristique()
+
+        #Edge occupation
+        #e = self.evalEdgeOccupation()
+        return  self.MC * m + self.SC * c + s + e
     
         
     def _max_min(self,profmax=4):
@@ -172,7 +199,7 @@ class myPlayer(PlayerInterface):
     def alphaBeta(self,depth, a, B, maximizingPlayer):
         if depth == 0:
             return self.eval
-        
+
         if maximizingPlayer== True:
             value = -10000
             for move in self._board.legal_moves():
@@ -214,6 +241,8 @@ class myPlayer(PlayerInterface):
     def max_score_alpha_beta(self, ply, alpha, beta):
         if ply == 0 or self._board.is_game_over() == True:
             return self.eval()
+            #async_result = self.pool.apply_async(self.eval)
+            #return async_result.get()
         bestscore = -10000
         for move in self._board.legal_moves():
             score = self.min_score_alpha_beta(ply-1, alpha, beta)
@@ -226,7 +255,9 @@ class myPlayer(PlayerInterface):
 
     def min_score_alpha_beta(self, ply, alpha, beta):
           if ply == 0 or self._board.is_game_over() == True:
-             return self.eval()
+            return self.eval()
+            #async_result = self.pool.apply_async(self.eval)
+            #return async_result.get()
           bestscore = 10000
           for move in self._board.legal_moves():
               score = self.max_score_alpha_beta(ply-1, alpha, beta)
@@ -238,7 +269,7 @@ class myPlayer(PlayerInterface):
           return bestscore
 
     # take in count the best shot
-    def _ia_min_max(self,profmax=5):
+    def _ia_min_max(self,profmax=4):
         self.nbnodes += 1
         best = -100
         best_shot = None
@@ -254,12 +285,13 @@ class myPlayer(PlayerInterface):
                 list_of_equal_moves.append(move)
             self._board.pop()
         return choice(list_of_equal_moves)
+
         
     def getPlayerMove(self):
         if self._board.is_game_over():
             print("Referee told me to play but the game is over!")
             return (-1,-1)
-        move =  self._ia_min_max(profmax=5)
+        move =  self._ia_min_max(profmax=4)
         self._board.push(move)
         print("I am playing ", move)
         (c,x,y) = move
