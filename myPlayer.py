@@ -8,14 +8,15 @@ from multiprocessing.pool import ThreadPool
 
 class myPlayer(PlayerInterface):
 
-    pool = ThreadPool(processes=1)  #for the thread
+    pool = ThreadPool(processes=4)  #pour les threads
 
     nbnodes = 0
     tab = [0,0]
     EC = 500
     MC = 0
     SC = 0
-    #tableau pour donner un poids à chaque case, utilisé pour l'heuristique
+    
+    #tableau pour donner un poids à chaque case, utilisé par certaines fonction d'évaluation
     tab_weight = [[ 100, -20, 20, -5, 10, 10, -5, 20, -20, 100] ,
                   [-20, -40, -5, -5, -3, -3, -5, -5, -40, -20 ],
                   [20, -5, 15, -4, 5, 5, -4, 15, -5, 20],
@@ -64,6 +65,7 @@ class myPlayer(PlayerInterface):
             return True
         return False
 
+    #pour set des constantes, et donner un poids différents aux heuristiques
     def setMcSc(self):
         tabDiscs =  self._board.get_nb_pieces()
         discs = tabDiscs[0] + tabDiscs[1]
@@ -79,7 +81,7 @@ class myPlayer(PlayerInterface):
         else:
            self.SC = 0
 
-
+    #donne le nombre de coups valides, utilisé par la fonction de mobilité
     def num_valid_moves(self, player):
         count = 0
         for i in range (0,10):
@@ -88,6 +90,7 @@ class myPlayer(PlayerInterface):
                     count+=1
         return count
 
+    #evaluation de la mobilité
     def mobilityEval(self):
         if(self._mycolor ==1):
             opponent = 2
@@ -100,10 +103,12 @@ class myPlayer(PlayerInterface):
         else :
             return 0
         
-
-    def OccupiedCornesEval(self):
+    #permet de se focus sur les coins, car emplacement stratégique
+    def CornesEval(self):
         v = 0
         i = 0
+        
+        #cases coin
         if(self._board._board[0][0] == self._mycolor):
                 v = v + self.tab_weight[0][0]
                 
@@ -115,8 +120,50 @@ class myPlayer(PlayerInterface):
                 
         if(self._board._board[9][9] == self._mycolor):
                 v = v + self.tab_weight[9][9]
+                
+        if(self._board._board[1][0] == self._mycolor):
+            v = v + self.tab_weight[1][0]
+
+        #cases qui pourraient donner un coin à l'adversaire
+        if(self._board._board[1][0] == self._mycolor):
+            v = v + self.tab_weight[1][0]
+            
+        if(self._board._board[1][1] == self._mycolor):
+            v = v + self.tab_weight[1][1]
+            
+        if(self._board._board[0][1] == self._mycolor):
+            v = v + self.tab_weight[ 0][1]
+
+        if(self._board._board[8][0] == self._mycolor):
+            v = v + self.tab_weight[8][0]
+            
+        if(self._board._board[8][1] == self._mycolor):
+            v = v + self.tab_weight[8][1]
+            
+        if(self._board._board[9][1] == self._mycolor):
+            v = v + self.tab_weight[9][1]
+            
+        if(self._board._board[0][8] == self._mycolor):
+            v = v + self.tab_weight[0][8]
+
+        if(self._board._board[1][8] == self._mycolor):
+            v = v + self.tab_weight[1][8]
+            
+        if(self._board._board[1][9] == self._mycolor):
+            v = v + self.tab_weight[1][9]
+            
+        if(self._board._board[8][8] == self._mycolor):
+            v = v + self.tab_weight[8][8]
+            
+        if(self._board._board[9][8] == self._mycolor):
+            v = v + self.tab_weight[9][8]
+            
+        if(self._board._board[8][9] == self._mycolor):
+            v = v + self.tab_weight[8][9]
         return v
 
+
+    #permet de se focus sur les cases des bords du jeu
     def evalEdgeOccupation(self):
         v = 0
         for i in range (0,10) :
@@ -133,29 +180,29 @@ class myPlayer(PlayerInterface):
 
     def eval(self):
 
-        async_result = self.pool.apply_async(self.mobilityEval)
+        '''async_result = self.pool.apply_async(self.mobilityEval)
         m = async_result.get()
 
-        async_result = self.pool.apply_async(self.OccupiedCornesEval)
+        async_result = self.pool.apply_async(self.CornesEval)
         c = async_result.get()
 
         async_result = self.pool.apply_async(self._board.heuristique)
         s = async_result.get()
 
         async_result = self.pool.apply_async(self.evalEdgeOccupation)
-        e = async_result.get()
+        e = async_result.get()'''
         
         #mobilite
-        #m = self.mobilityEval()
+        m = self.mobilityEval()
         
         #Corners occupation
-        #c = self.OccupiedCornesEval()
+        c = self.CornesEval()
 
         #heuristic of the score
-        #s = self._board.heuristique()
+        s = self._board.heuristique()
 
         #Edge occupation
-        #e = self.evalEdgeOccupation()
+        e = self.evalEdgeOccupation()
         return  self.MC * m + self.SC * c + s + e
     
         
@@ -198,7 +245,7 @@ class myPlayer(PlayerInterface):
 
     def alphaBeta(self,depth, a, B, maximizingPlayer):
         if depth == 0:
-            return self.eval
+            return self.eval()
 
         if maximizingPlayer== True:
             value = -10000
@@ -276,7 +323,7 @@ class myPlayer(PlayerInterface):
         list_of_equal_moves = []
         for move in self._board.legal_moves():
             self._board.push(move)
-            v = self.min_score_alpha_beta(profmax,-10000, 10000)
+            v = self.alphaBeta(profmax,-10000, 10000, False)
             if v > best or best_shot == None:
                 best = v
                 best_shot = move
