@@ -205,91 +205,12 @@ class myPlayer(PlayerInterface):
         e = self.evalEdgeOccupation()
         return  self.MC * m + self.SC * c + s + e
     
-        
-    def _max_min(self,profmax=4):
-        playerColor = self.isColorWhite()
-        global nbnodes
-        self.nbnodes += 1
-        if self._board.is_game_over():
-           return self.winner()
-        if profmax == 0:
-            eval = self.eval()
-            return eval if playerColor else -eval
-        best = -100
-        for move in self._board.legal_moves():
-            self._board.push(move)
-            v = self._min_max(profmax-1)
-            if v > best:
-                best = v
-            self._board.pop()
-        return best
-
-    def _min_max(self,profmax=4):
-        playerColor = self.isColorWhite()
-        global nbnodes
-        self.nbnodes += 1
-        if self._board.is_game_over():
-           return self.winner()
-        if profmax == 0:
-            eval = self.eval()
-            return eval if playerColor else -eval
-        worst = 100
-        for move in self._board.legal_moves():
-            self._board.push(move)
-            v = self._max_min(profmax-1)
-            if v < worst:
-                worst = v
-            self._board.pop()
-        return worst
-
-
-    def alphaBeta(self,depth, a, B, maximizingPlayer):
-        if depth == 0:
-            return self.eval()
-
-        if maximizingPlayer== True:
-            value = -10000
-            for move in self._board.legal_moves():
-                tmp = self.alphaBeta(depth - 1, a, B, False)
-                value = max(value, tmp)
-                a = max(a, value)
-                if a >= B:
-                    return a
-            return B
-        else:
-            value = 10000
-            for move in self._board.legal_moves():
-                tmp = self.alphaBeta(depth -1, a, B, True)
-                value = min(value, tmp)
-                B = min(B, value)
-                if a >= B:
-                    return a
-            return B
-
-    def MaxValue(self,depth,a, B):
-        if depth == 0 or self._board.is_game_over() == True:
-            return self.eval
-        for move in self._board.legal_moves():
-            a = max(a,self.MinValue(depth-1,a,B))
-            if a >= B:
-                return B
-        return a
-
-
-    def MinValue(self, depth,a, B):
-        if depth == 0 or self._board.is_game_over() == True:
-            return self.eval
-        for move in self._board.legal_moves():
-            B = min(self.MaxValue(depth -1,a,B))
-            if a >= B:
-                return a
-        return B
 
     def max_score_alpha_beta(self, ply, alpha, beta):
         if ply == 0 or self._board.is_game_over() == True:
-            return self.eval()
-            #async_result = self.pool.apply_async(self.eval)
-            #return async_result.get()
+            #return self.eval()
+            async_result = self.pool.apply_async(self.eval)
+            return async_result.get()
         bestscore = -10000
         for move in self._board.legal_moves():
             score = self.min_score_alpha_beta(ply-1, alpha, beta)
@@ -302,9 +223,9 @@ class myPlayer(PlayerInterface):
 
     def min_score_alpha_beta(self, ply, alpha, beta):
           if ply == 0 or self._board.is_game_over() == True:
-            return self.eval()
-            #async_result = self.pool.apply_async(self.eval)
-            #return async_result.get()
+            #return self.eval()
+            async_result = self.pool.apply_async(self.eval)
+            return async_result.get()
           bestscore = 10000
           for move in self._board.legal_moves():
               score = self.max_score_alpha_beta(ply-1, alpha, beta)
@@ -316,14 +237,14 @@ class myPlayer(PlayerInterface):
           return bestscore
 
     # take in count the best shot
-    def _ia_min_max(self,profmax=4):
+    def _ia_min_max(self,profmax):
         self.nbnodes += 1
         best = -100
         best_shot = None
         list_of_equal_moves = []
         for move in self._board.legal_moves():
             self._board.push(move)
-            v = self.alphaBeta(profmax,-10000, 10000, False)
+            v = self.min_score_alpha_beta(profmax,-10000, 10000)
             if v > best or best_shot == None:
                 best = v
                 best_shot = move

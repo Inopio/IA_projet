@@ -43,7 +43,7 @@ class alphaOnePlayer(PlayerInterface):
         return bestscore
 
     # take in count the best shot
-    def _ia_min_max(self,profmax=7):
+    def _ia_min_max(self,profmax):
         self.nbnodes += 1
         best = -100
         best_shot = None
@@ -64,7 +64,7 @@ class alphaOnePlayer(PlayerInterface):
         if self._board.is_game_over():
             print("Referee told me to play but the game is over!")
             return (-1,-1)
-        move =  self._ia_min_max(profmax=3)
+        move =  self._ia_min_max(profmax=4)
         self._board.push(move)
         print("I am playing ", move)
         (c,x,y) = move
