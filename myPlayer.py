@@ -65,10 +65,13 @@ class myPlayer(PlayerInterface):
             return True
         return False
 
+    def discCount(self):
+        tabDiscs =  self._board.get_nb_pieces()
+        return  tabDiscs[0] + tabDiscs[1]
+
     #pour set des constantes, et donner un poids différents aux heuristiques
     def setMcSc(self):
-        tabDiscs =  self._board.get_nb_pieces()
-        discs = tabDiscs[0] + tabDiscs[1]
+        discs  = self.discCount()
         self.MC = 350 - 2 * discs
         if( discs < 10):
             self.SC = 200 - discs
@@ -120,9 +123,6 @@ class myPlayer(PlayerInterface):
                 
         if(self._board._board[9][9] == self._mycolor):
                 v = v + self.tab_weight[9][9]
-                
-        if(self._board._board[1][0] == self._mycolor):
-            v = v + self.tab_weight[1][0]
 
         #cases qui pourraient donner un coin à l'adversaire
         if(self._board._board[1][0] == self._mycolor):
@@ -178,6 +178,7 @@ class myPlayer(PlayerInterface):
                 v+=1
         return v
 
+    #heuristique finale
     def eval(self):
 
         '''async_result = self.pool.apply_async(self.mobilityEval)
@@ -198,12 +199,14 @@ class myPlayer(PlayerInterface):
         #Corners occupation
         c = self.CornesEval()
 
-        #heuristic of the score
-        s = self._board.heuristique()
-
         #Edge occupation
         e = self.evalEdgeOccupation()
-        return  self.MC * m + self.SC * c + s + e
+
+        #nombre de pièces
+        p = self._board.heuristique()
+
+        self.setMcSc()
+        return  self.MC * m + c + self.EC * e + p
     
 
     def max_score_alpha_beta(self, ply, alpha, beta):
@@ -236,7 +239,7 @@ class myPlayer(PlayerInterface):
               beta = min(beta,bestscore)
           return bestscore
 
-    # take in count the best shot
+    # _ia_min_max prend en compte le meilleur coup
     def _ia_min_max(self,profmax):
         self.nbnodes += 1
         best = -100

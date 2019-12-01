@@ -6,13 +6,13 @@ import time
 from io import StringIO
 import sys
 from multiprocessing import Process, Pool
+from threading import Thread
 
-
-def localGame():
+def l():
     b = Reversi.Board(10)
 
     players = []
-    player1 = alphaOnePlayer.alphaOnePlayer()
+    player1 = randomPlayer.randomPlayer()
     player1.newGame(b._BLACK)
     players.append(player1)
     player2 = myPlayer.myPlayer()
@@ -77,6 +77,21 @@ def localGame():
         print("DEUCE")
     f.write("Time :")
     for item in totalTime:
-        f.write("%s" % item)
+        f.write("%s " % item)
     f.write("\n")
+    f.write("Nombre piece joueur Noir : %d\n" %nbblacks)
+    f.write("Nombre piece joueur Blanc : %d\n" %nbwhites)
+    f.write("\n\n")
     f.close()
+
+
+workerList=[]
+
+for i in range(100):
+    workerList.append(Thread(target=l()))
+
+for i in range(100):
+    workerList[i].start()
+
+for i in range(100):
+    workerList[i].join()

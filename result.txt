@@ -1,11 +1,464 @@
-Winner: WHITE
-Time: [18.477354526519775, 166.72785472869873]
-
-Winner: WHITE
-Time: [18.67109251022339, 112.7860119342804]
 
 Winner : Black
-Time :33.29313278198242239.05163955688477
+Time :0.014271020889282227 47.240031719207764 
+Nombre piece joueur Noir : 58
+Nombre piece joueur Blanc : 42
+
+
+Winner : Black
+Time :0.011936426162719727 131.23515558242798 
+Nombre piece joueur Noir : 59
+Nombre piece joueur Blanc : 41
+
 
 Winner : White
-Time :24.155894994735718182.56796216964722
+Time :0.012629270553588867 164.27708864212036 
+Nombre piece joueur Noir : 44
+Nombre piece joueur Blanc : 56
+
+
+Winner : Black
+Time :0.011697769165039062 182.56056261062622 
+Nombre piece joueur Noir : 66
+Nombre piece joueur Blanc : 34
+
+
+Time :0.011602640151977539 151.2902901172638 
+Nombre piece joueur Noir : 50
+Nombre piece joueur Blanc : 50
+
+
+Winner : Black
+Time :0.01233363151550293 129.43318557739258 
+Nombre piece joueur Noir : 62
+Nombre piece joueur Blanc : 38
+
+
+Time :0.01178288459777832 117.01501369476318 
+Nombre piece joueur Noir : 50
+Nombre piece joueur Blanc : 50
+
+
+Winner : White
+Time :0.011336565017700195 206.77502274513245 
+Nombre piece joueur Noir : 41
+Nombre piece joueur Blanc : 59
+
+
+Winner : White
+Time :0.011576175689697266 73.67511177062988 
+Nombre piece joueur Noir : 49
+Nombre piece joueur Blanc : 51
+
+
+Winner : White
+Time :0.011582136154174805 160.5727882385254 
+Nombre piece joueur Noir : 36
+Nombre piece joueur Blanc : 64
+
+
+Winner : Black
+Time :0.01315760612487793 137.42870473861694 
+Nombre piece joueur Noir : 64
+Nombre piece joueur Blanc : 36
+
+
+Winner : White
+Time :0.011574268341064453 110.86941957473755 
+Nombre piece joueur Noir : 24
+Nombre piece joueur Blanc : 76
+
+
+Winner : White
+Time :0.012205362319946289 157.03226518630981 
+Nombre piece joueur Noir : 39
+Nombre piece joueur Blanc : 61
+
+
+Winner : White
+Time :0.011820077896118164 130.08186507225037 
+Nombre piece joueur Noir : 32
+Nombre piece joueur Blanc : 68
+
+
+Winner : White
+Time :0.012522220611572266 96.35570168495178 
+Nombre piece joueur Noir : 47
+Nombre piece joueur Blanc : 53
+
+
+Winner : Black
+Time :0.011527061462402344 153.1488208770752 
+Nombre piece joueur Noir : 53
+Nombre piece joueur Blanc : 47
+
+
+Winner : White
+Time :0.01200723648071289 111.79824781417847 
+Nombre piece joueur Noir : 27
+Nombre piece joueur Blanc : 73
+
+
+Winner : Black
+Time :0.011754989624023438 109.67147088050842 
+Nombre piece joueur Noir : 54
+Nombre piece joueur Blanc : 46
+
+
+Winner : White
+Time :0.012701988220214844 120.39164757728577 
+Nombre piece joueur Noir : 44
+Nombre piece joueur Blanc : 56
+
+
+Winner : White
+Time :0.012452363967895508 130.43952894210815 
+Nombre piece joueur Noir : 43
+Nombre piece joueur Blanc : 57
+
+
+Winner : White
+Time :0.013315200805664062 78.18285417556763 
+Nombre piece joueur Noir : 38
+Nombre piece joueur Blanc : 62
+
+
+Winner : White
+Time :0.01220703125 126.03679418563843 
+Nombre piece joueur Noir : 35
+Nombre piece joueur Blanc : 65
+
+
+Time :0.012269258499145508 104.27394247055054 
+Nombre piece joueur Noir : 50
+Nombre piece joueur Blanc : 50
+
+
+Winner : White
+Time :0.011996030807495117 117.40978813171387 
+Nombre piece joueur Noir : 43
+Nombre piece joueur Blanc : 57
+
+
+Winner : White
+Time :0.011640548706054688 101.88392400741577 
+Nombre piece joueur Noir : 36
+Nombre piece joueur Blanc : 64
+
+
+Winner : White
+Time :0.012428522109985352 184.5525462627411 
+Nombre piece joueur Noir : 46
+Nombre piece joueur Blanc : 54
+
+
+Winner : White
+Time :0.011812448501586914 116.59768557548523 
+Nombre piece joueur Noir : 47
+Nombre piece joueur Blanc : 53
+
+
+Winner : White
+Time :0.011852264404296875 195.33248257637024 
+Nombre piece joueur Noir : 34
+Nombre piece joueur Blanc : 66
+
+
+Winner : White
+Time :0.012095928192138672 139.08184790611267 
+Nombre piece joueur Noir : 32
+Nombre piece joueur Blanc : 68
+
+
+Winner : Black
+Time :0.012764453887939453 120.98146486282349 
+Nombre piece joueur Noir : 63
+Nombre piece joueur Blanc : 37
+
+
+Winner : White
+Time :0.012088775634765625 145.18743181228638 
+Nombre piece joueur Noir : 44
+Nombre piece joueur Blanc : 56
+
+
+Winner : Black
+Time :0.011959314346313477 134.44493889808655 
+Nombre piece joueur Noir : 57
+Nombre piece joueur Blanc : 43
+
+
+Winner : White
+Time :0.012578010559082031 94.84466648101807 
+Nombre piece joueur Noir : 35
+Nombre piece joueur Blanc : 65
+
+
+Winner : Black
+Time :0.011986732482910156 191.65380382537842 
+Nombre piece joueur Noir : 52
+Nombre piece joueur Blanc : 48
+
+
+Winner : White
+Time :0.012496709823608398 155.4215657711029 
+Nombre piece joueur Noir : 46
+Nombre piece joueur Blanc : 54
+
+
+Winner : White
+Time :0.012321710586547852 85.60635352134705 
+Nombre piece joueur Noir : 44
+Nombre piece joueur Blanc : 56
+
+
+Winner : White
+Time :0.01260232925415039 81.61943411827087 
+Nombre piece joueur Noir : 42
+Nombre piece joueur Blanc : 58
+
+
+Winner : Black
+Time :0.011683225631713867 114.56721568107605 
+Nombre piece joueur Noir : 75
+Nombre piece joueur Blanc : 25
+
+
+Winner : White
+Time :0.011643648147583008 112.1665289402008 
+Nombre piece joueur Noir : 29
+Nombre piece joueur Blanc : 71
+
+
+Winner : White
+Time :0.011264324188232422 92.91129541397095 
+Nombre piece joueur Noir : 45
+Nombre piece joueur Blanc : 55
+
+
+Winner : Black
+Time :0.012167930603027344 69.45819115638733 
+Nombre piece joueur Noir : 54
+Nombre piece joueur Blanc : 46
+
+
+Winner : White
+Time :0.011365413665771484 147.70719408988953 
+Nombre piece joueur Noir : 40
+Nombre piece joueur Blanc : 60
+
+
+Winner : White
+Time :0.011695623397827148 147.29302072525024 
+Nombre piece joueur Noir : 41
+Nombre piece joueur Blanc : 59
+
+
+Winner : White
+Time :0.012313365936279297 133.55553245544434 
+Nombre piece joueur Noir : 26
+Nombre piece joueur Blanc : 74
+
+
+Winner : White
+Time :0.011774063110351562 119.30563759803772 
+Nombre piece joueur Noir : 27
+Nombre piece joueur Blanc : 73
+
+
+Winner : Black
+Time :0.012483835220336914 94.47579646110535 
+Nombre piece joueur Noir : 51
+Nombre piece joueur Blanc : 49
+
+
+Winner : White
+Time :0.011557340621948242 133.6342704296112 
+Nombre piece joueur Noir : 49
+Nombre piece joueur Blanc : 51
+
+
+Winner : Black
+Time :0.011559724807739258 81.53926086425781 
+Nombre piece joueur Noir : 55
+Nombre piece joueur Blanc : 45
+
+
+Winner : White
+Time :0.010982990264892578 95.39877033233643 
+Nombre piece joueur Noir : 33
+Nombre piece joueur Blanc : 67
+
+
+Winner : Black
+Time :0.01244354248046875 121.98564839363098 
+Nombre piece joueur Noir : 52
+Nombre piece joueur Blanc : 48
+
+
+Winner : Black
+Time :0.011879444122314453 77.24343752861023 
+Nombre piece joueur Noir : 52
+Nombre piece joueur Blanc : 48
+
+
+Winner : White
+Time :0.012759685516357422 83.69761323928833 
+Nombre piece joueur Noir : 33
+Nombre piece joueur Blanc : 67
+
+
+Winner : White
+Time :0.011278152465820312 115.00319695472717 
+Nombre piece joueur Noir : 44
+Nombre piece joueur Blanc : 56
+
+
+Winner : White
+Time :0.011239051818847656 119.02524852752686 
+Nombre piece joueur Noir : 27
+Nombre piece joueur Blanc : 73
+
+
+Winner : White
+Time :0.011677742004394531 83.47090196609497 
+Nombre piece joueur Noir : 39
+Nombre piece joueur Blanc : 61
+
+
+Winner : White
+Time :0.011687517166137695 110.51527070999146 
+Nombre piece joueur Noir : 46
+Nombre piece joueur Blanc : 54
+
+
+Winner : White
+Time :0.012018918991088867 100.14148926734924 
+Nombre piece joueur Noir : 42
+Nombre piece joueur Blanc : 58
+
+
+Winner : White
+Time :0.011874198913574219 119.20551323890686 
+Nombre piece joueur Noir : 37
+Nombre piece joueur Blanc : 63
+
+
+Time :0.012180089950561523 102.16800093650818 
+Nombre piece joueur Noir : 50
+Nombre piece joueur Blanc : 50
+
+
+Winner : White
+Time :0.01150202751159668 82.33499479293823 
+Nombre piece joueur Noir : 48
+Nombre piece joueur Blanc : 52
+
+
+Winner : White
+Time :0.01185917854309082 105.66163659095764 
+Nombre piece joueur Noir : 36
+Nombre piece joueur Blanc : 64
+
+
+Winner : White
+Time :0.01126718521118164 121.44939804077148 
+Nombre piece joueur Noir : 49
+Nombre piece joueur Blanc : 51
+
+
+Winner : Black
+Time :0.011961936950683594 144.64365530014038 
+Nombre piece joueur Noir : 53
+Nombre piece joueur Blanc : 47
+
+
+Winner : White
+Time :0.012171268463134766 133.98108625411987 
+Nombre piece joueur Noir : 47
+Nombre piece joueur Blanc : 53
+
+
+Winner : Black
+Time :0.012513399124145508 164.10202288627625 
+Nombre piece joueur Noir : 62
+Nombre piece joueur Blanc : 38
+
+
+Winner : White
+Time :0.011468648910522461 131.17643308639526 
+Nombre piece joueur Noir : 34
+Nombre piece joueur Blanc : 66
+
+
+Winner : Black
+Time :0.012595176696777344 123.25917625427246 
+Nombre piece joueur Noir : 51
+Nombre piece joueur Blanc : 49
+
+
+Time :0.01188039779663086 132.89483213424683 
+Nombre piece joueur Noir : 50
+Nombre piece joueur Blanc : 50
+
+
+Winner : White
+Time :0.011801004409790039 122.69783067703247 
+Nombre piece joueur Noir : 43
+Nombre piece joueur Blanc : 57
+
+
+Winner : White
+Time :0.012778997421264648 127.86576676368713 
+Nombre piece joueur Noir : 27
+Nombre piece joueur Blanc : 73
+
+
+Winner : Black
+Time :0.011649131774902344 129.81296563148499 
+Nombre piece joueur Noir : 74
+Nombre piece joueur Blanc : 26
+
+
+Winner : White
+Time :0.01096796989440918 118.3407723903656 
+Nombre piece joueur Noir : 37
+Nombre piece joueur Blanc : 63
+
+
+Winner : White
+Time :0.011673688888549805 111.10510277748108 
+Nombre piece joueur Noir : 35
+Nombre piece joueur Blanc : 65
+
+
+Winner : White
+Time :0.01180887222290039 146.8112404346466 
+Nombre piece joueur Noir : 45
+Nombre piece joueur Blanc : 55
+
+
+Winner : Black
+Time :0.011975288391113281 127.29581880569458 
+Nombre piece joueur Noir : 52
+Nombre piece joueur Blanc : 48
+
+
+Winner : White
+Time :0.012022733688354492 117.58880186080933 
+Nombre piece joueur Noir : 46
+Nombre piece joueur Blanc : 54
+
+
+Winner : White
+Time :0.011080026626586914 164.6825602054596 
+Nombre piece joueur Noir : 43
+Nombre piece joueur Blanc : 57
+
+
+Winner : White
+Time :0.0109710693359375 164.13031673431396 
+Nombre piece joueur Noir : 45
+Nombre piece joueur Blanc : 55
+
+
