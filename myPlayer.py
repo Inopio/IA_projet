@@ -205,8 +205,8 @@ class myPlayer(PlayerInterface):
         #nombre de pièces
         p = self._board.heuristique()
 
-        self.setMcSc()
-        return  self.MC * m + c + self.EC * e + p
+        #self.setMcSc()
+        return   2*m + 5*c +  2*e + 0.5*p
     
 
     def max_score_alpha_beta(self, ply, alpha, beta):
