@@ -58,7 +58,6 @@ def l():
 
         nextplayer = otherplayer
         nextplayercolor = othercolor
-
         print(b)
 
     print("The game is over")
@@ -87,11 +86,11 @@ def l():
 
 workerList=[]
 
-for i in range(100):
+for i in range(1):
     workerList.append(Thread(target=l()))
 
-for i in range(100):
+for i in range(1):
     workerList[i].start()
 
-for i in range(100):
+for i in range(1):
     workerList[i].join()

@@ -188,14 +188,27 @@ class Board:
                    return True
         return False
 
+    #fonction récursive pour éliminer les boucles for de legal_moves
+    def for_recursif(self,moves,x,y):
+        if x < self._boardsize:
+            if y < self._boardsize:
+                if self.lazyTest_ValidMove(self._nextPlayer, x, y):
+                    moves.append([self._nextPlayer,x,y])
+                self.for_recursif(moves,x,y+1)
+            else:
+                self.for_recursif(moves,x+1,0)
+
     # Renvoi la liste des coups possibles
     # Note: cette méthode pourrait être codée plus efficacement
     def legal_moves(self):
         moves = []
-        for x in range(0,self._boardsize):
-            for y in range(0,self._boardsize):
-                if self.lazyTest_ValidMove(self._nextPlayer, x, y):
-                    moves.append([self._nextPlayer,x,y])
+        y = 0
+        x = 0
+        #for x in range(0,self._boardsize):
+        self.for_recursif(moves,x,y)
+            #for y in range(0,self._boardsize):
+                #if self.lazyTest_ValidMove(self._nextPlayer, x, y):
+                    #moves.append([self._nextPlayer,x,y])
         if len(moves) is 0:
             moves = [[self._nextPlayer, -1, -1]] # We shall pass
         return moves
