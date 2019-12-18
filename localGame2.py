@@ -1,6 +1,7 @@
 import Reversi
 import myPlayer
-import randomPlayer
+import myPlayer2
+#import randomPlayer
 import alphaOnePlayer
 import time
 from io import StringIO
@@ -12,7 +13,7 @@ def l():
     b = Reversi.Board(10)
 
     players = []
-    player1 = randomPlayer.randomPlayer()
+    player1 = myPlayer2.myPlayer()
     player1.newGame(b._BLACK)
     players.append(player1)
     player2 = myPlayer.myPlayer()
@@ -28,12 +29,12 @@ def l():
     sysstdout= sys.stdout
     stringio = StringIO()
 
-    #print(b.legal_moves())
+    print(b.legal_moves())
     while not b.is_game_over():
-        #print("Referee Board:")
-        #print(b)
-        #print("Before move", nbmoves)
-        #print("Legal Moves: ", b.legal_moves())
+        print("Referee Board:")
+        print(b)
+        print("Before move", nbmoves)
+        print("Legal Moves: ", b.legal_moves())
         nbmoves += 1
         otherplayer = (nextplayer + 1) % 2
         othercolor = b._BLACK if nextplayercolor == b._WHITE else b._WHITE
@@ -47,25 +48,25 @@ def l():
         #print(("[Player "+str(nextplayer) + "] ").join(playeroutput.splitlines(True)))
         outputs[nextplayer] += playeroutput
         totalTime[nextplayer] += time.time() - currentTime
-        #print("Player ", nextplayercolor, players[nextplayer].getPlayerName(), "plays" + str(move))
+        print("Player ", nextplayercolor, players[nextplayer].getPlayerName(), "plays" + str(move))
         (x,y) = move 
         if not b.is_valid_move(nextplayercolor,x,y):
-            #print(otherplayer, nextplayer, nextplayercolor)
-            #print("Problem: illegal move")
+            print(otherplayer, nextplayer, nextplayercolor)
+            print("Problem: illegal move")
             break
         b.push([nextplayercolor, x, y])
         players[otherplayer].playOpponentMove(x,y)
 
         nextplayer = otherplayer
         nextplayercolor = othercolor
-        #print(b)
+        print(b)
 
-    #print("The game is over")
-    #print(b)
+    print("The game is over")
+    print(b)
     (nbwhites, nbblacks) = b.get_nb_pieces()
     print("Time:", totalTime)
     print("Winner: ", end="")
-    f = open("result.txt","a+")
+    f = open("result2.txt","a+")
     if nbwhites > nbblacks:
         print("WHITE")
         f.write("Winner : White\n")
@@ -85,7 +86,7 @@ def l():
 
 
 workerList=[]
-n = 99
+n = 92
 
 for i in range(n):
     workerList.append(Thread(target=l()))

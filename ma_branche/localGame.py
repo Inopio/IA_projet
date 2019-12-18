@@ -12,10 +12,10 @@ def l():
     b = Reversi.Board(10)
 
     players = []
-    player1 = randomPlayer.randomPlayer()
+    player1 = myPlayer.myPlayer()
     player1.newGame(b._BLACK)
     players.append(player1)
-    player2 = myPlayer.myPlayer()
+    player2 = randomPlayer.randomPlayer()
     player2.newGame(b._WHITE)
     players.append(player2)
 
@@ -28,7 +28,7 @@ def l():
     sysstdout= sys.stdout
     stringio = StringIO()
 
-    #print(b.legal_moves())
+    print(b.legal_moves())
     while not b.is_game_over():
         #print("Referee Board:")
         #print(b)
@@ -58,10 +58,11 @@ def l():
 
         nextplayer = otherplayer
         nextplayercolor = othercolor
+
         #print(b)
 
-    #print("The game is over")
-    #print(b)
+    print("The game is over")
+    print(b)
     (nbwhites, nbblacks) = b.get_nb_pieces()
     print("Time:", totalTime)
     print("Winner: ", end="")
@@ -85,13 +86,10 @@ def l():
 
 
 workerList=[]
-n = 99
 
-for i in range(n):
+for i in range(100):
     workerList.append(Thread(target=l()))
 
-for i in range(n):
+for i in range(100):
     workerList[i].start()
-
-for i in range(n):
     workerList[i].join()

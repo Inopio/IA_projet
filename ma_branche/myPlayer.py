@@ -93,60 +93,6 @@ class myPlayer(PlayerInterface):
                     count+=1
         return count
 
-    def stability(self):
-        for move in self._board.legal_moves():
-            
-            x = move[1]
-            y = move[2]
-            weight_move = self.tab_weight[x][y]
-
-            if(x < 9 and x > 1):
-                if(self._board._board[x-1][y] == self._opponent):
-                    if(self._board._board[x+1][y] == 0):
-                        return weight_move
-
-                if(self._board._board[x+1][y] == self._opponent):
-                    if(self._board._board[x-1][y] == 0):
-                        return weight_move
-                    
-                if(y < 9 and y > 1):
-                    if(self._board._board[x-1][y-1] == self._opponent):
-                        if(self._board._board[x+1][y+1] == 0):
-                            return weight_move
-
-                    if(self._board._board[x-1][y+1] == self._opponent):
-                        if(self._board._board[x+1][y-1] == 0):
-                            return weight_move
-                        
-                    if(self._board._board[x+1][y-1] == self._opponent):
-                        if(self._board._board[x-1][y+1] == 0):
-                            return weight_move
-                    
-                    if(self._board._board[x+1][y+1] == self._opponent):
-                        if(self._board._board[x-1][y-1] == 0):
-                            return weight_move
-                
-            if(y < 9 and y > 1):
-                if(self._board._board[x][y-1] == self._opponent):
-                    if(self._board._board[x][y+1] == 0):
-                        return weight_move
-                
-                if(self._board._board[x][y+1] == self._opponent):
-                    if(self._board._board[x][y-1] == 0):
-                        return weight_move
-                
-        return 0
-    
-    def opponent_stopping_move(self):
-        if(self._mycolor == 1):
-            opponent = 2
-        else:
-            opponent = 1
-        if(self.num_valid_moves(opponent)==0):
-            return 100
-        else:
-            return 0
-        
     #evaluation de la mobilité
     def mobilityEval(self):
         if(self._mycolor ==1):
@@ -186,7 +132,7 @@ class myPlayer(PlayerInterface):
             v = v + self.tab_weight[1][1]
             
         if(self._board._board[0][1] == self._mycolor):
-            v = v + self.tab_weight[0][1]
+            v = v + self.tab_weight[ 0][1]
 
         if(self._board._board[8][0] == self._mycolor):
             v = v + self.tab_weight[8][0]
@@ -222,26 +168,19 @@ class myPlayer(PlayerInterface):
         v = 0
         for i in range (0,10) :
             if(self._board._board[0][i] == self._mycolor):
-                v = v + self.tab_weight[0][i]
+                v+=1
             if(self._board._board[9][i] == self._mycolor):
-                v = v + self.tab_weight[9][i]
+                v+=1
         for j in range (1,9):
             if(self._board._board[i][9] == self._mycolor):
-                v = v + self.tab_weight[i][9]
+                v+=1
             if(self._board._board[i][0] == self._mycolor):
-                v = v + self.tab_weight[i][0]
+                v+=1
         return v
-
-    def minimization(self):
-        tabDisc =  self._board.get_nb_pieces()
-        if self._mycolor == 2:
-            return tabDisc[1] - tabDisc[0]
-        else :
-            return tabDisc[0] - tabDisc[1]
 
     #heuristique finale
     def eval(self):
-
+        
         #mobilite
         m = self.mobilityEval()
         
@@ -254,36 +193,13 @@ class myPlayer(PlayerInterface):
         #nombre de pièces
         p = self._board.heuristique()
 
-        #minimisation du nombre de pièces
-        mini = self.minimization()
-
-        #empêcher l'adversaire de jouer
-        o = self.opponent_stopping_move()
-
-        #disque stable
-        s = self.stability()
-
         #self.setMcSc()
-        current_board = self._board.get_nb_pieces()
-        #black
-        '''
-        if(current_board[0] + current_board[1] < 60):
-            return 2*m + 10 * c + 4*e + 0.5*mini 
-        else:
-            return 2*m + 10*c + 4*e + 0.5*mini + 2*o + 2*s
-        '''
-        if(self._mycolor == 2):
-            return 2*m + 15*c + 8*e + 0.5*p + 2*o + 4*s
-        else :
-            return 2*m + 10*c + 4*e + 0.5*mini + 2*o + 2*s
-
+        return   2*m + 5*c +  2*e + 0.5*p
     
 
     def max_score_alpha_beta(self, ply, alpha, beta):
         if ply == 0 or self._board.is_game_over() == True:
             return self.eval()
-            #async_result = self.pool.apply_async(self.eval)
-            #return async_result.get()
         bestscore = -10000
         for move in self._board.legal_moves():
             score = self.min_score_alpha_beta(ply-1, alpha, beta)
@@ -297,8 +213,6 @@ class myPlayer(PlayerInterface):
     def min_score_alpha_beta(self, ply, alpha, beta):
           if ply == 0 or self._board.is_game_over() == True:
             return self.eval()
-            #async_result = self.pool.apply_async(self.eval)
-            #return async_result.get()
           bestscore = 10000
           for move in self._board.legal_moves():
               score = self.max_score_alpha_beta(ply-1, alpha, beta)
@@ -330,13 +244,13 @@ class myPlayer(PlayerInterface):
         
     def getPlayerMove(self):
         if self._board.is_game_over():
-            print("Referee told me to play but the game is over!")
+            #print("Referee told me to play but the game is over!")
             return (-1,-1)
-        move =  self._ia_min_max(profmax=3)
+        move =  self._ia_min_max(profmax=2)
         self._board.push(move)
-        print("I am playing ", move)
+        #print("I am playing ", move)
         (c,x,y) = move
         assert(c==self._mycolor)
-        print("My current board :")
-        print(self._board)
+        #print("My current board :")
+        #print(self._board)
         return (x,y) 
