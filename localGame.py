@@ -85,6 +85,7 @@ def l():
 
 
 workerList=[]
+n = 8
 
 for i in range(1):
     workerList.append(Thread(target=l()))

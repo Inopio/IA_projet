@@ -15,6 +15,7 @@ def main(filename):
     print("Ratio de victoires du joueur noir :")
     print(winrateBlack)
 
+    print(nbTotal)
     #print("50/50 :")
     #print(winRateNull)
 main('result.txt')

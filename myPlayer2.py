@@ -6,7 +6,7 @@ from random import randint, choice
 from playerInterface import *
 from multiprocessing.pool import ThreadPool
 
-class myPlayer(PlayerInterface):
+class myPlayer2(PlayerInterface):
 
     pool = ThreadPool(processes=4)  #pour les threads
 
@@ -254,10 +254,7 @@ class myPlayer(PlayerInterface):
         s = self.stability()
 
         #self.setMcSc()
-        #black
         return 2*m + 10*c + 4*e + 0.5*p + 2*o + 2*s
-        #white
-        #return 2*m + 15*c + 8*e + 0.5*p + 2*o + 4*s
     
 
     def max_score_alpha_beta(self, ply, alpha, beta):
