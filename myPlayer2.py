@@ -6,7 +6,7 @@ from random import randint, choice
 from playerInterface import *
 from multiprocessing.pool import ThreadPool
 
-class myPlayer2(PlayerInterface):
+class myPlayer(PlayerInterface):
 
     pool = ThreadPool(processes=4)  #pour les threads
 
@@ -232,6 +232,13 @@ class myPlayer2(PlayerInterface):
                 v = v + self.tab_weight[i][0]
         return v
 
+    def minimization(self):
+        tabDisc =  self._board.get_nb_pieces()
+        if self._mycolor == 2:
+            return tabDisc[1] - tabDisc[0]
+        else :
+            return tabDisc[0] - tabDisc[1]
+
     #heuristique finale
     def eval(self):
 
@@ -247,6 +254,9 @@ class myPlayer2(PlayerInterface):
         #nombre de pièces
         p = self._board.heuristique()
 
+        #minimisation du nombre de pièces
+        mini = self.minimization()
+
         #empêcher l'adversaire de jouer
         o = self.opponent_stopping_move()
 
@@ -254,7 +264,14 @@ class myPlayer2(PlayerInterface):
         s = self.stability()
 
         #self.setMcSc()
-        return 2*m + 10*c + 4*e + 0.5*p + 2*o + 2*s
+        current_board = self._board.get_nb_pieces()
+        #black
+        if(current_board[0] + current_board[1] < 66):
+            return 2*m + 10*c + 4*e + 3*mini + 0.5*p + 2*o + 2*s
+        else:
+            return 2*m + 10*c + 4*e + 0.5*p + 2*o + 2*s
+        #white
+        #return 2*m + 15*c + 8*e + 0.5*p + 2*o + 4*s
     
 
     def max_score_alpha_beta(self, ply, alpha, beta):

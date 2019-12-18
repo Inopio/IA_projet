@@ -135,3 +135,15 @@ Nombre piece joueur Noir : 41
 Nombre piece joueur Blanc : 59
 
 
+Winner : White
+Time :0.024300575256347656 14.505143642425537 
+Nombre piece joueur Noir : 45
+Nombre piece joueur Blanc : 55
+
+
+Winner : White
+Time :0.022331953048706055 10.496947050094604 
+Nombre piece joueur Noir : 36
+Nombre piece joueur Blanc : 64
+
+
