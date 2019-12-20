@@ -1,6 +1,9 @@
 import Reversi
 import myPlayer
 import myPlayer2
+import randomPlayer
+import myPlayer3
+import myPlayer4
 #import randomPlayer
 import alphaOnePlayer
 import time
@@ -13,10 +16,10 @@ def l():
     b = Reversi.Board(10)
 
     players = []
-    player1 = myPlayer2.myPlayer()
+    player1 = myPlayer.myPlayer()
     player1.newGame(b._BLACK)
     players.append(player1)
-    player2 = myPlayer.myPlayer()
+    player2 = myPlayer4.myPlayer()
     player2.newGame(b._WHITE)
     players.append(player2)
 
@@ -86,7 +89,7 @@ def l():
 
 
 workerList=[]
-n = 92
+n = 8
 
 for i in range(n):
     workerList.append(Thread(target=l()))

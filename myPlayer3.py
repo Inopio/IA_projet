@@ -2,6 +2,7 @@
 
 import time
 import Reversi
+import math
 from random import randint, choice
 from playerInterface import *
 from multiprocessing.pool import ThreadPool
@@ -219,11 +220,69 @@ class myPlayer(PlayerInterface):
             v = v + self.tab_weight[8][9]
         return v
 
+    def edge_eval(self):
+
+        corners = [[1,1],[1,10], [10,1], [10,10]]
+        score = 0
+        
+        for i in range(self._board._boardsize):
+            for j in range(self._board._boardsize):
+                delta = 1
+                if i == 0 or i == 9:
+                    delta += 5
+                if j == 0 or j == 9:
+                    delta += 5
+
+                if i == 1 or i == 8:
+                    delta -= 5
+                if j == 1 or j == 8:
+                    delta -= 5
+
+                for corner in corners:
+                    distX = abs(corner[0] - i)
+                    distY = abs(corner[1] - j)
+                    dist  = math.sqrt(distX*distX + distY*distY)
+                    if dist < 4:
+                        delta += 3
+
+                
+                if self._board._board[i][j] == self._mycolor:
+                    score += delta
+                elif self._board._board[i][j] == self._opponent:
+                    score -= delta
+
+        for l in range(self._board._boardsize):
+            
+            for c in range(l):
+                delta = 1
+                if l == 0 or l == 9:
+                    delta += 5
+                if c == 0 or c == 9:
+                    delta += 5
+
+                if l == 1 or l == 8:
+                    delta -= 5
+                if c == 1 or c == 8:
+                    delta -= 5
+
+                for corner in corners:
+                    distX = abs(corner[0] - l)
+                    distY = abs(corner[1] - c)
+                    dist  = math.sqrt(distX*distX + distY*distY)
+                    if dist < 4:
+                        delta += 3
+
+                if c == self._mycolor:
+                    score += delta
+                elif c == self._opponent:
+                    score -= delta
+                    
+        return score
 
     #permet de se focus sur les cases des bords du jeu
     def evalEdgeOccupation(self):
         v = 0
-        for i in range (0,10) :
+        for i in range (1,9) :
             if(self._board._board[0][i] == self._mycolor):
                 v = v + self.tab_weight[0][i]
             if(self._board._board[9][i] == self._mycolor):
@@ -241,13 +300,10 @@ class myPlayer(PlayerInterface):
             return tabDisc[1] - tabDisc[0]
         else :
             return tabDisc[0] - tabDisc[1]
-
-    #def noDiagonals(self):
-       # if(self._board._board[4][5]
-
+        
     #heuristique finale
     def eval(self):
-        
+
         #mobilite
         m = self.mobilityEval()
         
@@ -255,21 +311,34 @@ class myPlayer(PlayerInterface):
         c = self.CornesEval()
 
         #Edge occupation
+        #e = self.evalEdgeOccupation()
         e = self.evalEdgeOccupation()
+        e2 = self.edge_eval()
 
         #nombre de pièces
         p = self._board.heuristique()
 
+        #minimisation du nombre de pièces
+        mini = self.minimization()
+
+        #empêcher l'adversaire de jouer
+        o = self.opponent_stopping_move()
+
+        #disque stable
+        s = self.stability()
+
         #self.setMcSc()
-        return   2*m + 5*c +  2*e + 0.5*p
+        current_board = self._board.get_nb_pieces()
+        # bonne pour white, return 2*m + 15*c + 4*e + 0.5*mini
+        if(self._mycolor == 2):
+            return 2*m + 10*c + 6*e + 0.5*p + 2*o + 2*s + e2
+        else:
+            return 2*m + 10*c + 6*e + 0.5*p + 2*o + 2*s
 
     
-
     def max_score_alpha_beta(self, ply, alpha, beta):
         if ply == 0 or self._board.is_game_over() == True:
             return self.eval()
-            #async_result = self.pool.apply_async(self.eval)
-            #return async_result.get()
         bestscore = -10000
         for move in self._board.legal_moves():
             score = self.min_score_alpha_beta(ply-1, alpha, beta)
@@ -283,8 +352,6 @@ class myPlayer(PlayerInterface):
     def min_score_alpha_beta(self, ply, alpha, beta):
           if ply == 0 or self._board.is_game_over() == True:
             return self.eval()
-            #async_result = self.pool.apply_async(self.eval)
-            #return async_result.get()
           bestscore = 10000
           for move in self._board.legal_moves():
               score = self.max_score_alpha_beta(ply-1, alpha, beta)
@@ -318,7 +385,13 @@ class myPlayer(PlayerInterface):
         if self._board.is_game_over():
             print("Referee told me to play but the game is over!")
             return (-1,-1)
-        move =  self._ia_min_max(profmax=3)
+        #move = self._ia_min_max(profmax=2)
+        if(self.discCount() < 20):
+            move = self._ia_min_max(profmax=2)
+        elif(self.discCount() >=20 and self.discCount() <= 80):
+            move = self._ia_min_max(profmax=3)
+        elif(self.discCount() > 80):
+            move = self._ia_min_max(profmax=6)
         self._board.push(move)
         print("I am playing ", move)
         (c,x,y) = move

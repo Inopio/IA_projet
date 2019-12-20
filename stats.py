@@ -18,4 +18,4 @@ def main(filename):
     print(nbTotal)
     #print("50/50 :")
     #print(winRateNull)
-main('result2.txt')
+main('result.txt')

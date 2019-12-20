@@ -1,6 +1,8 @@
 import Reversi
 import myPlayer
 import randomPlayer
+import myPlayer3
+import myPlayer2
 import alphaOnePlayer
 import time
 from io import StringIO
@@ -12,7 +14,7 @@ def l():
     b = Reversi.Board(10)
 
     players = []
-    player1 = randomPlayer.randomPlayer()
+    player1 = myPlayer3.myPlayer()
     player1.newGame(b._BLACK)
     players.append(player1)
     player2 = myPlayer.myPlayer()
@@ -30,10 +32,10 @@ def l():
 
     #print(b.legal_moves())
     while not b.is_game_over():
-        #print("Referee Board:")
-        #print(b)
-        #print("Before move", nbmoves)
-        #print("Legal Moves: ", b.legal_moves())
+        print("Referee Board:")
+        print(b)
+        print("Before move", nbmoves)
+        print("Legal Moves: ", b.legal_moves())
         nbmoves += 1
         otherplayer = (nextplayer + 1) % 2
         othercolor = b._BLACK if nextplayercolor == b._WHITE else b._WHITE
@@ -85,7 +87,7 @@ def l():
 
 
 workerList=[]
-n = 99
+n = 1
 
 for i in range(n):
     workerList.append(Thread(target=l()))

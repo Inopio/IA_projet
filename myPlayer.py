@@ -2,6 +2,7 @@
 
 import time
 import Reversi
+import math
 from random import randint, choice
 from playerInterface import *
 from multiprocessing.pool import ThreadPool
@@ -12,21 +13,18 @@ class myPlayer(PlayerInterface):
 
     nbnodes = 0
     tab = [0,0]
-    EC = 500
-    MC = 0
-    SC = 0
     
     #tableau pour donner un poids à chaque case, utilisé par certaines fonction d'évaluation
-    tab_weight = [[ 100, -20, 20, -5, 10, 10, -5, 20, -20, 100] ,
+    tab_weight = [[ 150, -20, 20, 10, 10, 10, 10, 20, -20, 150] ,
                   [-20, -40, -5, -5, -3, -3, -5, -5, -40, -20 ],
-                  [20, -5, 15, -4, 5, 5, -4, 15, -5, 20],
-                  [-5,-5, -4, -4, 3, 3, -4, -4, -5, -5],
+                  [20, -5, 7, -4, 5, 5, -4, 7, -5, 20],
+                  [10,-5, -4, -4, 3, 3, -4, -4, -5, 10],
                   [10, -3, 5, 3, 2, 2, 3, 5, -3, 10],
                   [10, -3, 5, 3, 2, 2, 3, 5, -3, 10],
-                  [-5,-5, -4, -4, 3, 3, -4, -4, -5, -5],
-                  [20, -5, 15, -4, 5, 5, -4, 15, -5, 20],
+                  [10,-5, -4, -4, 3, 3, -4, -4, -5, 10],
+                  [20, -5, 7, -4, 5, 5, -4, 7, -5, 20],
                   [-20, -40, -5, -5, -3, -3, -5, -5, -40, -20 ],
-                  [ 100, -20, 20, -5, 10, 10, -5, 20, -20, 100]]
+                  [ 150, -20, 20, 10, 10, 10, 10, 20, -20, 150]]
     
     def __init__(self):
         self._board = Reversi.Board(10)
@@ -93,49 +91,116 @@ class myPlayer(PlayerInterface):
                     count+=1
         return count
 
+    #verifie qu'un disque est stable
     def stability(self):
+        cpt = 0
+        weight_max = 0
+        weight = 0
+        if(self._mycolor == 1):
+            opponent = 2
+        else:
+            opponent = 1
         for move in self._board.legal_moves():
-            
             x = move[1]
             y = move[2]
             weight_move = self.tab_weight[x][y]
 
+            
+            weight = 0
+            #vertical line
             if(x < 9 and x > 1):
-                if(self._board._board[x-1][y] == self._opponent):
-                    if(self._board._board[x+1][y] == 0):
-                        return weight_move
+                if(self._board._board[x-1][y] == opponent):
+                    cpt = 1
+                    while(x+cpt < 9 and self._board._board[x+cpt][y] != opponent):
+                        if(self._board._board[x+cpt][y] == self._mycolor):
+                            cpt = cpt + 1
+                            weight = weight + self.tab_weight[x+cpt][y]
+                        if(self._board._board[x+cpt][y] == 0):
+                            weight_max = max(weight,weight_max)
+                            break
 
-                if(self._board._board[x+1][y] == self._opponent):
-                    if(self._board._board[x-1][y] == 0):
-                        return weight_move
-                    
-                if(y < 9 and y > 1):
-                    if(self._board._board[x-1][y-1] == self._opponent):
-                        if(self._board._board[x+1][y+1] == 0):
-                            return weight_move
+                if(self._board._board[x+1][y] == opponent):
+                    weight = 0
+                    cpt = 1
+                    while(x-cpt > 0 and self._board._board[x-cpt][y] != opponent):
+                        if(self._board._board[x-cpt][y] == self._mycolor):
+                            cpt = cpt + 1
+                            weight = weight + self.tab_weight[x-cpt][y]
+                        if(self._board._board[x-cpt][y] == 0):
+                            weight_max = max(weight,weight_max)
+                            break
+            
 
-                    if(self._board._board[x-1][y+1] == self._opponent):
-                        if(self._board._board[x+1][y-1] == 0):
-                            return weight_move
-                        
-                    if(self._board._board[x+1][y-1] == self._opponent):
-                        if(self._board._board[x-1][y+1] == 0):
-                            return weight_move
+            #diagonal lines
+            if(y < 9 and y > 1 and x < 9 and x > 1):
+                if(self._board._board[x-1][y-1] == opponent):
+                    weight = 0
+                    cpt = 1
+                    while(cpt+y < 9 and cpt+x < 9 and self._board._board[x+cpt][y+cpt] != opponent):
+                        if(self._board._board[x+cpt][y+cpt] == self._mycolor):
+                            cpt = cpt + 1
+                            weight = weight + self.tab_weight[x+cpt][y+cpt]
+                        if(self._board._board[x+cpt][y+cpt] == 0):
+                            weight_max = max(weight,weight_max)
+                            break
+
+                if(self._board._board[x-1][y+1] == opponent):
+                    cpt = 1
+                    weight = 0
+                    while(cpt+x < 9 and y-cpt > 0 and self._board._board[x+cpt][y-cpt] != opponent):
+                        if(self._board._board[x+cpt][y-cpt] == self._mycolor):
+                            cpt = cpt + 1
+                            weight = weight + self.tab_weight[x+cpt][y-cpt]
+                        if(self._board._board[x+cpt][y-cpt] == 0):
+                            weight_max = max(weight,weight_max)
+                            break
                     
-                    if(self._board._board[x+1][y+1] == self._opponent):
-                        if(self._board._board[x-1][y-1] == 0):
-                            return weight_move
+                if(self._board._board[x+1][y-1] == opponent):
+                    cpt = 1
+                    weight = 0
+                    while(x-cpt > 0 and y+cpt < 9 and self._board._board[x-cpt][y+cpt] != opponent):
+                        if(self._board._board[x-cpt][y+cpt] == self._mycolor):
+                            cpt = cpt + 1
+                            weight = weight + self.tab_weight[x-cpt][y+cpt]
+                        if(self._board._board[x-cpt][y+cpt] == 0):
+                            weight_max = max(weight,weight_max)
+                            break
                 
+                if(self._board._board[x+1][y+1] == opponent):
+                    cpt = 1
+                    weight = 0
+                    while(x-cpt > 0 and y-cpt > 0 and self._board._board[x-cpt][y-cpt] != opponent):
+                        if(self._board._board[x-cpt][y-cpt] == self._mycolor):
+                            cpt = cpt + 1
+                            weight = weight + self.tab_weight[x-cpt][y-cpt]
+                        if(self._board._board[x-cpt][y-cpt] == 0):
+                            weight_max = max(weight,weight_max)
+                            break
+                
+            #horizontal line
             if(y < 9 and y > 1):
-                if(self._board._board[x][y-1] == self._opponent):
-                    if(self._board._board[x][y+1] == 0):
-                        return weight_move
+                if(self._board._board[x][y-1] == opponent):
+                    cpt = 1
+                    weight = 0
+                    while(y+cpt < 9 and self._board._board[x][y+cpt] != opponent):
+                        if(self._board._board[x][y+cpt] == self._mycolor):
+                            cpt = cpt + 1
+                            weight = weight + self.tab_weight[x][y+cpt]
+                        if(self._board._board[x][y+cpt] == 0):
+                            weight_max = max(weight,weight_max)
+                            break
+                if(self._board._board[x][y+1] == opponent):
+                    cpt = 1
+                    weight = 0
+                    while(y-cpt > 0 and self._board._board[x][y-cpt] != opponent):
+                        if(self._board._board[x][y-cpt] == self._mycolor):
+                            cpt = cpt + 1
+                            weight = weight + self.tab_weight[x][y-cpt]
+                        if(self._board._board[x][y-cpt] == 0):
+                            weight_max = max(weight,weight_max)
+                            break
                 
-                if(self._board._board[x][y+1] == self._opponent):
-                    if(self._board._board[x][y-1] == 0):
-                        return weight_move
-                
-        return 0
+        return -weight_max
     
     def opponent_stopping_move(self):
         if(self._mycolor == 1):
@@ -239,6 +304,90 @@ class myPlayer(PlayerInterface):
         else :
             return tabDisc[0] - tabDisc[1]
 
+    def takecentral(self):
+        v = 0
+        if(self._board._board[4][4] == self._mycolor):
+            v = v + 100
+        if(self._board._board[4][5] == self._mycolor):
+            v = v + 100
+        if(self._board._board[5][5] == self._mycolor):
+            v = v + 100
+        if(self._board._board[5][4] == self._mycolor):
+            v = v + 100
+        return v
+
+    def edge_eval(self):
+
+        corners = [[1,1],[1,10], [10,1], [10,10]]
+        score = 0
+        
+        for i in range(self._board._boardsize):
+            for j in range(self._board._boardsize):
+                delta = 1
+                if i == 0 or i == 9:
+                    delta += 5
+                if j == 0 or j == 9:
+                    delta += 5
+
+                if i == 1 or i == 8:
+                    delta -= 5
+                if j == 1 or j == 8:
+                    delta -= 5
+
+                for corner in corners:
+                    distX = abs(corner[0] - i)
+                    distY = abs(corner[1] - j)
+                    dist  = math.sqrt(distX*distX + distY*distY)
+                    if dist < 4:
+                        delta += 3
+
+                
+                if self._board._board[i][j] == self._mycolor:
+                    score += delta
+                elif self._board._board[i][j] == self._opponent:
+                    score -= delta
+
+        for l in range(self._board._boardsize):
+            
+            for c in range(l):
+                delta = 1
+                if l == 0 or l == 9:
+                    delta += 5
+                if c == 0 or c == 9:
+                    delta += 5
+
+                if l == 1 or l == 8:
+                    delta -= 5
+                if c == 1 or c == 8:
+                    delta -= 5
+
+                for corner in corners:
+                    distX = abs(corner[0] - l)
+                    distY = abs(corner[1] - c)
+                    dist  = math.sqrt(distX*distX + distY*distY)
+                    if dist < 4:
+                        delta += 3
+
+                if c == self._mycolor:
+                    score += delta
+                elif c == self._opponent:
+                    score -= delta
+                    
+        return score
+
+    def oneshot(self):
+        current_tab = self._board.get_nb_pieces()
+        if(self._mycolor == 2):
+            if(current_tab[0] > current_tab[1]):
+                return 100
+            else:
+                return 0
+        else:
+            if(current_tab[1] > current_tab[0]):
+                return 100
+            else:
+                return 0
+
     #heuristique finale
     def eval(self):
 
@@ -248,8 +397,9 @@ class myPlayer(PlayerInterface):
         #Corners occupation
         c = self.CornesEval()
 
-        #Edge occupation
+        #Edge eval(occupation and weight)
         e = self.evalEdgeOccupation()
+        e_eval = self.edge_eval()
 
         #nombre de pièces
         p = self._board.heuristique()
@@ -260,30 +410,20 @@ class myPlayer(PlayerInterface):
         #empêcher l'adversaire de jouer
         o = self.opponent_stopping_move()
 
+        os = self.oneshot()
+
         #disque stable
         s = self.stability()
 
-        #self.setMcSc()
-        current_board = self._board.get_nb_pieces()
-        #black
-        '''
-        if(current_board[0] + current_board[1] < 60):
-            return 2*m + 10 * c + 4*e + 0.5*mini 
+        if(self.discCount() < 90):
+            return 2*m + 10*c + 6 * e + 0.5*p + 2*s
         else:
-            return 2*m + 10*c + 4*e + 0.5*mini + 2*o + 2*s
-        '''
-        if(self._mycolor == 2):
-            return 2*m + 15*c + 8*e + 0.5*p + 2*o + 4*s
-        else :
-            return 2*m + 10*c + 4*e + 0.5*mini + 2*o + 2*s
+            return 15*c + 6*e + 2*s
 
-    
 
     def max_score_alpha_beta(self, ply, alpha, beta):
         if ply == 0 or self._board.is_game_over() == True:
             return self.eval()
-            #async_result = self.pool.apply_async(self.eval)
-            #return async_result.get()
         bestscore = -10000
         for move in self._board.legal_moves():
             score = self.min_score_alpha_beta(ply-1, alpha, beta)
@@ -297,8 +437,6 @@ class myPlayer(PlayerInterface):
     def min_score_alpha_beta(self, ply, alpha, beta):
           if ply == 0 or self._board.is_game_over() == True:
             return self.eval()
-            #async_result = self.pool.apply_async(self.eval)
-            #return async_result.get()
           bestscore = 10000
           for move in self._board.legal_moves():
               score = self.max_score_alpha_beta(ply-1, alpha, beta)
@@ -332,7 +470,12 @@ class myPlayer(PlayerInterface):
         if self._board.is_game_over():
             print("Referee told me to play but the game is over!")
             return (-1,-1)
-        move =  self._ia_min_max(profmax=3)
+        if(self.discCount() < 20):
+            move = self._ia_min_max(profmax=2)
+        elif(self.discCount() >=20 and self.discCount() <= 80):
+            move = self._ia_min_max(profmax=3)
+        elif(self.discCount() > 80):
+            move = self._ia_min_max(profmax=6)
         self._board.push(move)
         print("I am playing ", move)
         (c,x,y) = move
